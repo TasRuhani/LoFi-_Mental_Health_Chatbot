@@ -2,7 +2,8 @@ fastapi
 uvicorn
 jinja2
 python-multipart
-transformers
+# transformers
 torch
 google-generativeai
 python-dotenv
+textblob
