@@ -7,7 +7,6 @@
     <title>Mental Health Chatbot</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
-    <!-- Style for the backgrounds -->
     <style>
         .chat-bg {
             background-image: radial-gradient(circle at center, rgba(17, 24, 39, 0.2), rgba(17, 24, 39, 1)), url('/static/assets/doodle.png');
@@ -77,18 +76,13 @@
 
 <body class="dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 h-screen flex flex-col">
 
-    <!-- Main content area that holds sidebar and chat -->
     <div class="flex flex-1 overflow-hidden">
 
-        <!-- Sidebar: Hidden on mobile, slides in. Always visible on desktop. -->
         <div id="sidebar"
             class="fixed z-30 inset-y-0 left-0 w-3/4 sm:w-3/4 md:w-1/3 lg:w-1/4 shadow-md h-full transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto">
-            <!-- Overlay to keep text readable -->
             <div class="absolute inset-0 bg-gray-800 bg-opacity-60"></div>
-            <!-- Container with responsive padding -->
             <div class="relative flex flex-col items-center justify-between p-4 md:p-8 min-h-full">
 
-                <!-- Top Section: Lofi Player -->
                 <div class="text-center w-full">
                     <img src="/static/assets/lofi_girl.gif" alt="Lofi Girl"
                         class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover shadow-lg border-4 border-pink-400 dark:border-pink-300 mb-4 mx-auto" />
@@ -110,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Bottom Section: Breathing Exercise -->
                 <div class="text-center mt-8 md:mt-0">
                     <div id="breathing-container" class="mx-auto my-6 rounded-full overflow-hidden">
                         <img id="breathing-gif" src="/static/assets/cat.gif" alt="Breathing cat"
@@ -126,15 +119,11 @@
             </div>
         </div>
 
-        <!-- Overlay for mobile when sidebar is open -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
 
-        <!-- Main Content: Chat Area -->
-        <div class="flex-1 h-full flex flex-col p-4 md:p-6 space-y-4 chat-bg">
-            <!-- Header -->
-            <div class="flex justify-between items-center border-b border-gray-700 pb-2 flex-shrink-0">
+        <div class="flex-1 h-full flex flex-col chat-bg">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-2 flex-shrink-0 px-4 md:px-6 pt-4 md:pt-6">
                 <div class="flex items-center">
-                    <!-- Burger Menu Button (Mobile Only) -->
                     <button id="burger-menu" class="md:hidden text-white mr-4">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +132,6 @@
                             </path>
                         </svg>
                     </button>
-                    <!-- Logo and Title -->
                     <img src="/static/assets/logo.png" alt="Logo" class="h-8 w-8 mr-3">
                     <h1
                         class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hidden md:block">
@@ -154,29 +142,28 @@
                     New Chat
                 </button>
             </div>
-            <!-- Chat Box -->
-            <div id="chat-box" class="flex flex-col space-y-4 overflow-y-auto flex-1"></div>
+            <div id="chat-box" class="flex flex-col space-y-4 overflow-y-auto flex-1 p-4 md:p-6"></div>
 
-            <!-- Input area -->
-            <div
-                class="flex items-center p-1 rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-800 w-full flex-shrink-0">
-                <input id="chat-input" type="text" placeholder="Say something..."
-                    class="flex-grow bg-transparent focus:outline-none p-3" />
-                <button onclick="sendMessage()"
-                    class="ml-2 p-2 text-pink-500 hover:text-pink-400 rounded-full hover:bg-gray-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-send">
-                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                </button>
+            <div class="flex-shrink-0 p-4 md:px-6">
+                <div
+                    class="flex items-center p-1 rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-800 w-full">
+                    <input id="chat-input" type="text" placeholder="Say something..."
+                        class="flex-grow bg-transparent focus:outline-none p-3" />
+                    <button onclick="sendMessage()"
+                        class="ml-2 p-2 text-pink-500 hover:text-pink-400 rounded-full hover:bg-gray-700 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-send">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+        </div>
 
 
-    <!-- Script -->
     <script>
         const audio = document.getElementById("audio-player");
         let musicRecommended = false;
