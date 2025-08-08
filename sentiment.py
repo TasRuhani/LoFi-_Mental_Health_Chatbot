@@ -1,75 +1,42 @@
-# from transformers import pipeline
-
-# try:
-#     sentiment_pipeline = pipeline(
-#         "sentiment-analysis", 
-#         model="distilbert-base-uncased-finetuned-sst-2-english"
-#     )
-# except Exception as e:
-#     print(f"Error loading sentiment analysis model: {e}")
-#     # In case of an error, create a dummy pipeline to avoid crashing the app.
-#     sentiment_pipeline = None
-
-# def detect_mood(text: str) -> str:
-#     """
-#     Analyzes the sentiment of the text and returns a corresponding mood.
-#     - User message contains neutral/chill keywords -> "chill"
-#     - POSITIVE sentiment -> "happy"
-#     - NEGATIVE or other -> "mellow"
-#     """
-#     # --- New: Check for neutral/chill keywords first ---
-#     chill_keywords = ["bored", "calm", "relaxed", "nothing", "meh", "okay", "alright", "fine"]
-#     lower_text = text.lower()
-#     if any(keyword in lower_text for keyword in chill_keywords):
-#         return "chill"
-
-#     # If the model failed to load, return a default mood.
-#     if not sentiment_pipeline:
-#         return "mellow"
-
-#     try:
-#         # If no chill keywords, proceed with sentiment analysis
-#         result = sentiment_pipeline(text)[0]
-#         label = result['label']
-        
-#         if label == "POSITIVE":
-#             return "happy"
-#         else:
-#             return "mellow"
-            
-#     except Exception as e:
-#         print(f"Error during sentiment analysis: {e}")
-#         return "mellow"
-
-
 # sentiment.py
 
-from textblob import TextBlob
+import os
+import requests
+
+HUGGINGFACE_API_TOKEN = os.environ.get("HUGGINGFACE_API_TOKEN")
+API_URL = "https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english"
+
+def query_sentiment_api(payload):
+    """Sends a request to the Hugging Face Inference API."""
+    if not HUGGINGFACE_API_TOKEN:
+        print("Hugging Face API token not found.")
+        return None
+        
+    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 
 def detect_mood(text: str) -> str:
     """
-    Analyzes the sentiment of the text using TextBlob and returns a mood.
-    - Polarity > 0.1  -> "happy"
-    - Polarity < -0.1 -> "mellow"
-    - Otherwise       -> "chill"
+    Analyzes the sentiment of the text using the Hugging Face API.
     """
+    chill_keywords = ["bored", "calm", "relaxed", "nothing", "meh", "okay", "alright", "fine"]
+    if any(keyword in text.lower() for keyword in chill_keywords):
+        return "chill"
+
     try:
-        # Create a TextBlob object
-        blob = TextBlob(text)
+        output = query_sentiment_api({"inputs": text})
         
-        # Get the polarity score (-1.0 to 1.0)
-        polarity = blob.sentiment.polarity
-        
-        if polarity > 0.1:
-            return "happy"
-        elif polarity < -0.1:
-            return "mellow"
-        else:
-            return "chill"
+        if output and isinstance(output, list) and output[0]:
+            label = output[0][0]['label']
             
+            if label == "POSITIVE":
+                return "happy"
+            else: # NEGATIVE
+                return "mellow"
+        
+        return "chill"
+
     except Exception as e:
-        print(f"Error during TextBlob sentiment analysis: {e}")
-        # Return a safe default mood in case of an error.
+        print(f"Error during Hugging Face API call: {e}")
         return "mellow"
-
-

@@ -2,8 +2,6 @@ fastapi
 uvicorn
 jinja2
 python-multipart
-# transformers
-torch
 google-generativeai
 python-dotenv
-textblob
+requests
