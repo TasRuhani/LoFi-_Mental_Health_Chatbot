@@ -94,7 +94,8 @@
                         class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover shadow-lg border-4 border-pink-400 dark:border-pink-300 mb-4 mx-auto" />
                     <audio id="audio-player" loop></audio>
                     <div class="space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-5 py-2 w-full max-w-xs mx-auto">
+                        <div
+                            class="flex flex-col sm:flex-row justify-center gap-2 sm:gap-5 py-2 w-full max-w-xs mx-auto">
                             <button onclick="setTrack('mellow')"
                                 class="bg-purple-500 text-white py-2 px-4 sm:px-10 rounded hover:bg-purple-600">Mellow</button>
                             <button onclick="setTrack('chill')"
@@ -163,9 +164,9 @@
                     class="flex-grow bg-transparent focus:outline-none p-3" />
                 <button onclick="sendMessage()"
                     class="ml-2 p-2 text-pink-500 hover:text-pink-400 rounded-full hover:bg-gray-700 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-send">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-send">
                         <line x1="22" y1="2" x2="11" y2="13"></line>
                         <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                     </svg>
@@ -220,12 +221,23 @@
             const message = input.value.trim();
             if (!message) return;
 
+            // Add user's message
             const userBubble = document.createElement("div");
             userBubble.className = "self-end bg-blue-500 text-white p-3 rounded-lg max-w-md message-bubble";
             userBubble.textContent = message;
             chatBox.appendChild(userBubble);
-            input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Clear and blur input (collapse keyboard on mobile)
+            input.value = "";
+            input.blur();
+
+            // Refocus after small delay to reopen keyboard smoothly if desired
+            setTimeout(() => {
+                input.focus();
+                chatBox.scrollTop = chatBox.scrollHeight;
+                window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+            }, 100);
 
             try {
                 const res = await fetch("/chat", {
@@ -234,6 +246,7 @@
                     body: JSON.stringify({ message, music_recommended: musicRecommended })
                 });
                 const data = await res.json();
+
                 const botBubble = document.createElement("div");
                 botBubble.className = "self-start bg-cyan-700 text-white p-3 rounded-lg max-w-md whitespace-pre-line message-bubble";
                 botBubble.textContent = data.reply;
@@ -312,8 +325,8 @@
                 // Start the exercise
                 button.textContent = 'Stop Breathing';
                 container.classList.add('breathing');
-                
-                mainBreathingLoop = setInterval(() => {}, 19000);
+
+                mainBreathingLoop = setInterval(() => { }, 19000);
 
                 const cycle = async () => {
                     if (!mainBreathingLoop) return;
@@ -326,7 +339,7 @@
                         cycle();
                     }
                 };
-                
+
                 setTimeout(() => {
                     if (mainBreathingLoop) {
                         cycle();
